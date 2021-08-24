@@ -20,6 +20,7 @@ public class NetworkUtils {
 
     private static final String API_KEY = "9a67dd772df654d12df2bf98eed4f4f8";
     private static final String BASE_URL = "https://api.themoviedb.org/3/discover/movie";
+
     private static final String PARAMS_API_KEY = "api_key";
     private static final String PARAMS_LANGUAGE = "language";
     private static final String PARAMS_SORT_BY = "sort_by";
@@ -60,7 +61,6 @@ public class NetworkUtils {
         URL url = buildURL(sortBy, page);
         try {
             result = new JSONLoadTask().execute(url).get();
-            Log.i("MyFilms", result.toString());
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
