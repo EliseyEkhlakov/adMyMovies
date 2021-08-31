@@ -6,9 +6,12 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.demo.mymovies.data.FavouriteMovie;
 import com.demo.mymovies.data.MainViewModel;
 import com.demo.mymovies.data.Movie;
 import com.squareup.picasso.Picasso;
@@ -21,8 +24,11 @@ public class DetailActivity extends AppCompatActivity {
     private TextView textViewRating;
     private TextView textViewReleaseDate;
     private TextView textViewOverview;
+    private ImageView imageViewAddToFavourite;
 
     private int id;
+    private Movie movie;
+    private FavouriteMovie favouriteMovie;
 
     private MainViewModel viewModel;
 
@@ -36,6 +42,8 @@ public class DetailActivity extends AppCompatActivity {
         textViewRating = findViewById(R.id.textViewRating);
         textViewReleaseDate = findViewById(R.id.textViewReleaseDate);
         textViewOverview = findViewById(R.id.textViewOverview);
+        imageViewAddToFavourite = findViewById(R.id.imageViewAddToFavorite);
+
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("id")) {
             id = intent.getIntExtra("id", -1);
@@ -43,12 +51,33 @@ public class DetailActivity extends AppCompatActivity {
             finish();
         }
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        Movie movie = viewModel.getMovieById(id);
+        movie = viewModel.getMovieById(id);
         Picasso.get().load(movie.getBigPosterPath()).into(imageViewBigPoster);
         textViewTitle.setText(movie.getTitle());
         textViewOriginalTitle.setText(movie.getOriginalTitle());
         textViewRating.setText(Double.toString(movie.getVoteAverage()));
         textViewOverview.setText(movie.getOverview());
         textViewReleaseDate.setText(movie.getReleaseDate());
+        setFavourite();
+    }
+
+    public void onClickChangeFavorite(View view) {
+        if(favouriteMovie == null) {
+            viewModel.insertFavouriteMovie(new FavouriteMovie(movie));
+            Toast.makeText(this, R.string.add_to_favourite, Toast.LENGTH_SHORT).show();
+        } else {
+            viewModel.deleteFavouriteMovie(favouriteMovie);
+            Toast.makeText(this, R.string.delete_from_favourite, Toast.LENGTH_SHORT).show();
+        }
+        setFavourite();
+    }
+
+    private void setFavourite(){
+        favouriteMovie = viewModel.getFavouriteMovieById(id);
+        if(favouriteMovie == null){
+            imageViewAddToFavourite.setImageResource(R.drawable.favourite_add_to);
+        } else {
+            imageViewAddToFavourite.setImageResource(R.drawable.favourite_remove);
+        }
     }
 }
