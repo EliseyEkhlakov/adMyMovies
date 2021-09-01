@@ -4,8 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,10 +18,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.demo.mymovies.adapters.ReviewAdapter;
+import com.demo.mymovies.adapters.TrailerAdapter;
 import com.demo.mymovies.data.FavouriteMovie;
 import com.demo.mymovies.data.MainViewModel;
 import com.demo.mymovies.data.Movie;
+import com.demo.mymovies.data.Review;
+import com.demo.mymovies.data.Trailer;
+import com.demo.mymovies.utils.JSONUtils;
+import com.demo.mymovies.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -29,6 +42,12 @@ public class DetailActivity extends AppCompatActivity {
     private TextView textViewReleaseDate;
     private TextView textViewOverview;
     private ImageView imageViewAddToFavourite;
+
+    private RecyclerView recyclerViewTrailers;
+    private RecyclerView recyclerViewReviews;
+    private ReviewAdapter reviewAdapter;
+    private TrailerAdapter trailerAdapter;
+
     private int id;
     private Movie movie;
     private FavouriteMovie favouriteMovie;
@@ -44,7 +63,7 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        switch (id){
+        switch (id) {
             case R.id.itemMain:
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
@@ -84,10 +103,31 @@ public class DetailActivity extends AppCompatActivity {
         textViewOverview.setText(movie.getOverview());
         textViewReleaseDate.setText(movie.getReleaseDate());
         setFavourite();
+        recyclerViewTrailers = findViewById(R.id.recycledViewTrailers);
+        recyclerViewReviews = findViewById(R.id.recycledViewReviews);
+        reviewAdapter = new ReviewAdapter();
+        trailerAdapter = new TrailerAdapter();
+        trailerAdapter.setOnTrailerClickListener(new TrailerAdapter.OnTrailerClickListener() {
+            @Override
+            public void onTrailerClick(String url) {
+                Intent intentToTrailer = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intentToTrailer);
+            }
+        });
+        recyclerViewReviews.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewTrailers.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewReviews.setAdapter(reviewAdapter);
+        recyclerViewTrailers.setAdapter(trailerAdapter);
+        JSONObject jsonObjectTrailers = NetworkUtils.getJSONForVideos(movie.getId());
+        JSONObject jsonObjectReviews = NetworkUtils.getJSONForReviews(movie.getId());
+        ArrayList<Trailer> trailers = JSONUtils.getTrailersFromJSON(jsonObjectTrailers);
+        ArrayList<Review> reviews = JSONUtils.getReviewsFromJSON(jsonObjectReviews);
+        reviewAdapter.setReviews(reviews);
+        trailerAdapter.setTrailers(trailers);
     }
 
     public void onClickChangeFavorite(View view) {
-        if(favouriteMovie == null) {
+        if (favouriteMovie == null) {
             viewModel.insertFavouriteMovie(new FavouriteMovie(movie));
             Toast.makeText(this, R.string.add_to_favourite, Toast.LENGTH_SHORT).show();
         } else {
@@ -97,9 +137,9 @@ public class DetailActivity extends AppCompatActivity {
         setFavourite();
     }
 
-    private void setFavourite(){
+    private void setFavourite() {
         favouriteMovie = viewModel.getFavouriteMovieById(id);
-        if(favouriteMovie == null){
+        if (favouriteMovie == null) {
             imageViewAddToFavourite.setImageResource(R.drawable.favourite_add_to);
         } else {
             imageViewAddToFavourite.setImageResource(R.drawable.favourite_remove);
