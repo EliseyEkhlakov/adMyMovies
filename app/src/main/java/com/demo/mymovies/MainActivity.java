@@ -1,13 +1,5 @@
 package com.demo.mymovies;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,6 +11,15 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.loader.content.Loader;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.demo.mymovies.adapters.MovieAdapter;
 import com.demo.mymovies.data.MainViewModel;
 import com.demo.mymovies.data.Movie;
@@ -27,10 +28,11 @@ import com.demo.mymovies.utils.NetworkUtils;
 
 import org.json.JSONObject;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements androidx.loader.app.LoaderManager.LoaderCallbacks<JSONObject> {
 
     private RecyclerView recyclerViewPosters;
     private MovieAdapter movieAdapter;
@@ -38,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView textViewTopRated;
     private TextView textViewPopularity;
     private MainViewModel viewModel;
+    private static final int LOADER_ID = 777; //any number
+    private androidx.loader.app.LoaderManager loaderManager;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -49,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        switch (id){
+        switch (id) {
             case R.id.itemMain:
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
@@ -65,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        loaderManager = getSupportLoaderManager();
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         switchSort = findViewById(R.id.switchSort);
         textViewPopularity = findViewById(R.id.textViewPopularity);
@@ -132,7 +137,23 @@ public class MainActivity extends AppCompatActivity {
 
     //
     private void downloadData(int methodOfSort, int page) {
-        JSONObject jsonObject = NetworkUtils.getJSONFromNetwork(methodOfSort, 1);
+        URL url = NetworkUtils.buildURL(methodOfSort, page);
+        Bundle bundle = new Bundle();
+        bundle.putString("url", url.toString());
+        loaderManager.restartLoader(LOADER_ID, bundle, this);
+    }
+    //
+
+    @NonNull
+    @Override
+    public Loader<JSONObject> onCreateLoader(int id, Bundle bundle) {
+        NetworkUtils.JSONLoader jsonLoader = new NetworkUtils.JSONLoader(this, bundle);
+        return jsonLoader;
+        //return null;
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull androidx.loader.content.Loader<JSONObject> loader, JSONObject jsonObject) {
         ArrayList<Movie> movies = JSONUtils.getMoviesFromJSON(jsonObject);
         if (movies != null && !movies.isEmpty()) {
             viewModel.deleteAllMovies();
@@ -140,5 +161,13 @@ public class MainActivity extends AppCompatActivity {
                 viewModel.insertMovie(movie);
             }
         }
+        loaderManager.destroyLoader(LOADER_ID);
     }
+
+    @Override
+    public void onLoaderReset(@NonNull androidx.loader.content.Loader<JSONObject> loader) {
+
+    }
+
+
 }
