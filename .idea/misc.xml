@@ -3,9 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/eea17/AndroidStudioProjects/adMyMovies/app/src/main/res/layout-land/activity_detail.xml" value="0.41903584672435107" />
         <entry key="..\:/Users/eea17/AndroidStudioProjects/adMyMovies/app/src/main/res/layout/activity_detail.xml" value="0.2898550724637681" />
         <entry key="..\:/Users/eea17/AndroidStudioProjects/adMyMovies/app/src/main/res/layout/activity_favourite.xml" value="0.2898550724637681" />
         <entry key="..\:/Users/eea17/AndroidStudioProjects/adMyMovies/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/eea17/AndroidStudioProjects/adMyMovies/app/src/main/res/layout/movie_info.xml" value="0.26268115942028986" />
         <entry key="..\:/Users/eea17/AndroidStudioProjects/adMyMovies/app/src/main/res/layout/movie_item.xml" value="0.1765625" />
         <entry key="..\:/Users/eea17/AndroidStudioProjects/adMyMovies/app/src/main/res/layout/review_item.xml" value="0.2898550724637681" />
         <entry key="..\:/Users/eea17/AndroidStudioProjects/adMyMovies/app/src/main/res/layout/trailer_item.xml" value="0.2898550724637681" />
