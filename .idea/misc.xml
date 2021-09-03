@@ -3,19 +3,19 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/eea17/AndroidStudioProjects/adMyMovies/app/src/main/res/layout-land/activity_detail.xml" value="0.41903584672435107" />
         <entry key="..\:/Users/eea17/AndroidStudioProjects/adMyMovies/app/src/main/res/layout/activity_detail.xml" value="0.2898550724637681" />
         <entry key="..\:/Users/eea17/AndroidStudioProjects/adMyMovies/app/src/main/res/layout/activity_favourite.xml" value="0.2898550724637681" />
         <entry key="..\:/Users/eea17/AndroidStudioProjects/adMyMovies/app/src/main/res/layout/activity_main.xml" value="0.33" />
-        <entry key="..\:/Users/eea17/AndroidStudioProjects/adMyMovies/app/src/main/res/layout/movie_info.xml" value="0.26268115942028986" />
         <entry key="..\:/Users/eea17/AndroidStudioProjects/adMyMovies/app/src/main/res/layout/movie_item.xml" value="0.1765625" />
         <entry key="..\:/Users/eea17/AndroidStudioProjects/adMyMovies/app/src/main/res/layout/review_item.xml" value="0.2898550724637681" />
         <entry key="..\:/Users/eea17/AndroidStudioProjects/adMyMovies/app/src/main/res/layout/trailer_item.xml" value="0.2898550724637681" />
         <entry key="..\:/Users/eea17/AndroidStudioProjects/adMyMovies/app/src/main/res/menu/main_menu.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/eea17/AndroidStudioProjects/adMyMovies/app/src/main/res/xml/network_security_config.xml" value="0.1765625" />
-        <entry key="..\:/Users/elisey.ekhlakov/AndroidStudioProjects/MyMovies/app/src/main/res/layout/activity_detail.xml" value="0.30570652173913043" />
+        <entry key="..\:/Users/elisey.ekhlakov/AndroidStudioProjects/MyMovies/app/src/main/res/layout-land/activity_detail.xml" value="0.28239929947460596" />
+        <entry key="..\:/Users/elisey.ekhlakov/AndroidStudioProjects/MyMovies/app/src/main/res/layout/activity_detail.xml" value="0.25" />
         <entry key="..\:/Users/elisey.ekhlakov/AndroidStudioProjects/MyMovies/app/src/main/res/layout/activity_favourite.xml" value="0.30570652173913043" />
         <entry key="..\:/Users/elisey.ekhlakov/AndroidStudioProjects/MyMovies/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/elisey.ekhlakov/AndroidStudioProjects/MyMovies/app/src/main/res/layout/movie_info.xml" value="0.25905797101449274" />
         <entry key="..\:/Users/elisey.ekhlakov/AndroidStudioProjects/MyMovies/app/src/main/res/layout/movie_item.xml" value="0.16458333333333333" />
       </map>
     </option>
