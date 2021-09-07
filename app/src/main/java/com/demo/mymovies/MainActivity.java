@@ -32,6 +32,7 @@ import org.json.JSONObject;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements androidx.loader.app.LoaderManager.LoaderCallbacks<JSONObject> {
 
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements androidx.loader.a
     private static int page = 1;
     private static int methodOfSort;
     private static boolean isLoading = false;
+    private static String lang;
 
 
     @Override
@@ -82,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements androidx.loader.a
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        lang = Locale.getDefault().getLanguage();
         loaderManager = getSupportLoaderManager();
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         switchSort = findViewById(R.id.switchSort);
@@ -114,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements androidx.loader.a
             @Override
             public void onReachEnd() {
                 if (!isLoading) {
-                    downloadData(methodOfSort, page);
+                    downloadData(methodOfSort, page, lang);
                 }
             }
         });
@@ -150,12 +153,12 @@ public class MainActivity extends AppCompatActivity implements androidx.loader.a
             textViewPopularity.setTextColor(getResources().getColor(R.color.colorAccent));
             methodOfSort = NetworkUtils.POPULARITY;
         }
-        downloadData(methodOfSort, page);
+        downloadData(methodOfSort, page, lang);
     }
 
     //
-    private void downloadData(int methodOfSort, int page) {
-        URL url = NetworkUtils.buildURL(methodOfSort, page);
+    private void downloadData(int methodOfSort, int page, String lang) {
+        URL url = NetworkUtils.buildURL(methodOfSort, page, lang);
         Bundle bundle = new Bundle();
         bundle.putString("url", url.toString());
         loaderManager.restartLoader(LOADER_ID, bundle, this);
